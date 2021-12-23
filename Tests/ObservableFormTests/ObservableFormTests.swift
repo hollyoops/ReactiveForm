@@ -1,11 +1,45 @@
 import XCTest
-@testable import ObservableForm
+import ObservableForm
+
+class ProfileForm: ObservableForm {
+  @FormField(validators: [Validator.required])
+  var name: String = ""
+  
+  @FormField(validators: [Validator.required, Validator.email])
+  var email: String = ""
+}
+
+class SettingForm: ObservableForm {
+  var name = FormControl("", validators: [Validator.required])
+  var email = FormControl("", validators: [Validator.required, Validator.email])
+}
 
 final class ObservableFormTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(ObservableForm().text, "Hello, World!")
-    }
+  func testFormField() throws {
+    let profileForm = ProfileForm()
+
+    XCTAssertTrue(profileForm.$email.isValid)
+    
+    profileForm.$email.value = "test"
+    
+    XCTAssertFalse(profileForm.$email.isValid)
+
+    profileForm.$email.value = "test@gmail.com"
+
+    XCTAssertTrue(profileForm.$email.isValid)
+  }
+
+  func testFormControl() throws {
+    let settingForm = SettingForm()
+
+    XCTAssertTrue(settingForm.email.isValid)
+
+    settingForm.email.value = "test"
+
+    XCTAssertFalse(settingForm.email.isValid)
+
+    settingForm.email.value = "test@gmail.com"
+
+    XCTAssertTrue(settingForm.email.isValid)
+  }
 }
