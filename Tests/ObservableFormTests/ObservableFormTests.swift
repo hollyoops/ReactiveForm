@@ -2,44 +2,50 @@ import XCTest
 import ObservableForm
 
 class ProfileForm: ObservableForm {
-  @FormField(validators: [Validator.required])
+  @FormField(validators: [.required])
   var name: String = ""
   
-  @FormField(validators: [Validator.required, Validator.email])
+  @FormField(validators: [.required, .email])
   var email: String = ""
 }
 
 class SettingForm: ObservableForm {
-  var name = FormControl("", validators: [Validator.required])
-  var email = FormControl("", validators: [Validator.required, Validator.email])
+  var name = FormControl("", validators: [.required])
+  var email = FormControl("", validators: [.required, .email])
 }
 
 final class ObservableFormTests: XCTestCase {
   func testFormField() throws {
     let profileForm = ProfileForm()
 
-    XCTAssertTrue(profileForm.$email.isValid)
+    XCTAssertFalse(profileForm.$email.isValid)
+    XCTAssertTrue(profileForm.$email.errors[.email])
     
     profileForm.$email.value = "test"
     
     XCTAssertFalse(profileForm.$email.isValid)
+    XCTAssertTrue(profileForm.$email.errors[.email])
 
     profileForm.$email.value = "test@gmail.com"
 
     XCTAssertTrue(profileForm.$email.isValid)
+    XCTAssertFalse(profileForm.$email.errors[.email])
   }
 
   func testFormControl() throws {
     let settingForm = SettingForm()
 
-    XCTAssertTrue(settingForm.email.isValid)
+    XCTAssertFalse(settingForm.email.isValid)
+    XCTAssertTrue(settingForm.email.errors[.email])
 
     settingForm.email.value = "test"
 
     XCTAssertFalse(settingForm.email.isValid)
+    XCTAssertTrue(settingForm.email.errors[.email])
 
     settingForm.email.value = "test@gmail.com"
 
     XCTAssertTrue(settingForm.email.isValid)
+    XCTAssertFalse(settingForm.email.errors[.email])
   }
 }

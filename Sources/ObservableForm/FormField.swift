@@ -16,7 +16,7 @@ public struct FormField<Value> {
 
   public init(
     wrappedValue value: Value,
-    validators: [FormControl<Value>.Validator]
+    validators: [Validator<Value>]
   ) {
     self.value = value
     self.projectedValue = .init(value, validators: validators)
