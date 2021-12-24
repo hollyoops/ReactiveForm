@@ -1,15 +1,15 @@
 import XCTest
 import ReactiveForm
 
-class ProfileForm: ObservableForm {
+fileprivate class ProfileForm: ObservableForm {
   @FormField(validators: [.required])
-  var name: String = ""
+  var name = ""
   
   @FormField(validators: [.required, .email])
-  var email: String = ""
+  var email = ""
 }
 
-class SettingForm: ObservableForm {
+fileprivate class SettingForm: ObservableForm {
   var name = FormControl("", validators: [.required])
   var email = FormControl("", validators: [.required, .email])
 }

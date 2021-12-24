@@ -1,4 +1,4 @@
-public struct UpdateStrategy {
+public struct UpdateStrategy: Equatable {
   var updateOnInit: Bool
   var updateOnChange: Bool
 

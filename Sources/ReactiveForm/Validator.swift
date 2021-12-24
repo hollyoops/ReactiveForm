@@ -11,6 +11,12 @@ public struct Validator<Value> {
   }
 }
 
+extension Validator: Equatable {
+  public static func == (lhs: Validator<Value>, rhs: Validator<Value>) -> Bool {
+    lhs.key == rhs.key
+  }
+}
+
 extension Validator where Value == String {
   public static let required = Validator(Rule.required)
   public static let email = Validator(Rule.email)
