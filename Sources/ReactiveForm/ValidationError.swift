@@ -7,10 +7,10 @@ public struct ValidationErrors<Value> {
     for validator: Validator<Value>,
     value: Bool
   ) {
-    errors.updateValue(!value, forKey: validator.key)
+    errors.updateValue(!value, forKey: validator.id)
   }
 
   public subscript(_ validator: Validator<Value>) -> Bool {
-    errors[validator.key] ?? false
+    errors[validator.id] ?? false
   }
 }

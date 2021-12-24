@@ -17,7 +17,7 @@ final class FormFieldTests: XCTestCase {
     let profileForm = ProfileForm()
 
     XCTAssertEqual(profileForm.$name.value, "Mario")
-    XCTAssertEqual(profileForm.$name.validators, [.required])
+    XCTAssertEqual(profileForm.$name.validators[0].id, Validator.required.id)
     XCTAssertEqual(profileForm.$name.strategy, .never)
   }
 
