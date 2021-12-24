@@ -12,4 +12,9 @@ jobs:
       - name: Build
         run: swift build
       - name: Run tests
-        run: swift test
+        run: |
+          swift test --enable-code-coverage
+          xcrun llvm-cov export --format="lcov" .build/debug/ReactiveFormPackageTests.xctest/Contents/MacOS/ReactiveFormPackageTests --instr-profile .build/debug/codecov/default.profdata > info.lcov
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
