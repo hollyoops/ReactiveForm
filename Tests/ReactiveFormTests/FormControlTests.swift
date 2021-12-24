@@ -1,5 +1,5 @@
 import XCTest
-import ObservableForm
+import ReactiveForm
 
 final class FormControlTests: XCTestCase {
   func testInitWithUpdateStrategyOnlyChange() throws {

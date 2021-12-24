@@ -1,5 +1,5 @@
 import XCTest
-import ObservableForm
+import ReactiveForm
 
 class ProfileForm: ObservableForm {
   @FormField(validators: [.required])
