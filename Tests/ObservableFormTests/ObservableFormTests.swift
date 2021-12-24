@@ -15,14 +15,22 @@ class SettingForm: ObservableForm {
 }
 
 final class ObservableFormTests: XCTestCase {
+  override class func setUp() {
+    UpdateStrategy.default = .always
+  }
+
+  override class func tearDown() {
+    UpdateStrategy.default = .onlyChange
+  }
+
   func testFormField() throws {
     let profileForm = ProfileForm()
 
     XCTAssertFalse(profileForm.$email.isValid)
     XCTAssertTrue(profileForm.$email.errors[.email])
-    
+
     profileForm.$email.value = "test"
-    
+
     XCTAssertFalse(profileForm.$email.isValid)
     XCTAssertTrue(profileForm.$email.errors[.email])
 

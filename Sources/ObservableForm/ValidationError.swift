@@ -4,7 +4,7 @@ public struct ValidationErrors<Value> {
   var errors: [UUID: Bool] = [:]
 
   mutating func update(
-    _ validator: Validator<Value>,
+    for validator: Validator<Value>,
     value: Bool
   ) {
     errors.updateValue(!value, forKey: validator.key)

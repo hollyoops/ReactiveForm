@@ -16,9 +16,14 @@ public struct FormField<Value> {
 
   public init(
     wrappedValue value: Value,
-    validators: [Validator<Value>]
+    validators: [Validator<Value>] = [],
+    strategy: UpdateStrategy = .default
   ) {
     self.value = value
-    self.projectedValue = .init(value, validators: validators)
+    self.projectedValue = .init(
+      value,
+      validators: validators,
+      strategy: strategy
+    )
   }
 }
