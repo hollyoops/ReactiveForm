@@ -4,16 +4,23 @@ protocol Validatable {
   var isValid: Bool { get }
   var isInvalid: Bool { get }
 
+  func updateValidity()
   func updateValueAndValidity()
 }
+
+typealias ValidatableObject = Validatable & AnyObject
 
 protocol ObjectWillChangePublishable {
   var objectWillChange: ObservableObjectPublisher { get }
 }
 
-typealias ValidatableControl = Validatable & ObjectWillChangePublishable
+protocol Childable {
+  func setParent(_: ValidatableObject)
+}
 
-protocol AbstractFormControl: ValidatableControl, ObservableObject {
+typealias ValidatableControl = Validatable & ObjectWillChangePublishable & Childable
+
+protocol AbstractControl: ValidatableControl, ObservableObject {
   associatedtype Value where Value: Equatable
 
   var value: Value { get set }

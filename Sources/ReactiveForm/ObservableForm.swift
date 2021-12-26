@@ -17,14 +17,23 @@ open class ObservableForm: AbstractForm {
   public init() {
     collectControls(self)
     forwardObjectWillChangeFromControls()
-    updateFormValidity()
+    setFormAsParentOfControls()
+    updateValidity()
   }
 
   /// Updates the validity of all controls in the form,
   /// also updates the validity of the form.
   public func updateValueAndValidity() {
     updateControlsValidity()
-    updateFormValidity()
+    updateValidity()
+  }
+
+  func updateValidity() {
+    isValid = controls.allSatisfy {
+      $0.isValid
+    }
+
+    isInvalid = !isValid
   }
 }
 
@@ -64,11 +73,9 @@ private extension ObservableForm {
     }
   }
 
-  func updateFormValidity() {
-    isValid = controls.allSatisfy {
-      $0.isValid
+  func setFormAsParentOfControls() {
+    controls.forEach {
+      $0.setParent(self)
     }
-
-    isInvalid = !isValid
   }
 }

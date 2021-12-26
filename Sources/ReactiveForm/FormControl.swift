@@ -1,6 +1,6 @@
 import Combine
 
-public class FormControl<Value: Equatable>: AbstractFormControl {
+public class FormControl<Value: Equatable>: AbstractControl {
   @Published public var value: Value {
     didSet {
       updateValidity()
@@ -11,6 +11,7 @@ public class FormControl<Value: Equatable>: AbstractFormControl {
   @Published public private(set) var isValid: Bool
   @Published public private(set) var isInvalid: Bool
 
+  private weak var parent: ValidatableObject?
   public private(set) var validators: [Validator<Value>]
 
   public init(
@@ -35,7 +36,7 @@ public class FormControl<Value: Equatable>: AbstractFormControl {
   }
 
   /// Recalculates validation status of the control.
-  private func updateValidity() {
+  func updateValidity() {
     isValid = validators.reduce(true) { previousValidity, validator in
       let currentValidity = validator.fn(value)
       errors.update(for: validator, value: currentValidity)
@@ -43,5 +44,10 @@ public class FormControl<Value: Equatable>: AbstractFormControl {
       return previousValidity && currentValidity
     }
     isInvalid = !isValid
+    parent?.updateValidity()
+  }
+
+  func setParent(_ parent: ValidatableObject) {
+    self.parent = parent
   }
 }
