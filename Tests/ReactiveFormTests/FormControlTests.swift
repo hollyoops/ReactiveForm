@@ -2,31 +2,8 @@ import XCTest
 import ReactiveForm
 
 final class FormControlTests: XCTestCase {
-  func testInitWithUpdateStrategyOnlyChange() throws {
-    let name = FormControl(
-      "",
-      validators: [.required],
-      strategy: .onlyChange
-    )
-
-    XCTAssertFalse(name.isValid)
-    XCTAssertFalse(name.isInvalid)
-    XCTAssertFalse(name.errors[.required])
-
-    name.value = "Mario"
-    name.value = ""
-
-    XCTAssertFalse(name.isValid)
-    XCTAssertTrue(name.isInvalid)
-    XCTAssertTrue(name.errors[.required])
-  }
-
-  func testInitWithUpdateStrategyAlways() throws {
-    let name = FormControl(
-      "",
-      validators: [.required],
-      strategy: .always
-    )
+  func testInitAndUpdateValueDirectly() throws {
+    let name = FormControl("", validators: [.required])
 
     XCTAssertFalse(name.isValid)
     XCTAssertTrue(name.isInvalid)
@@ -45,39 +22,41 @@ final class FormControlTests: XCTestCase {
     XCTAssertTrue(name.errors[.required])
   }
 
-  func testInitWithUpdateStrategyNever() throws {
-    let name = FormControl(
-      "",
-      validators: [.required],
-      strategy: .never
-    )
-
-    XCTAssertFalse(name.isValid)
-    XCTAssertFalse(name.isInvalid)
-    XCTAssertFalse(name.errors[.required])
-
-    name.value = "Mario"
-
-    XCTAssertFalse(name.isValid)
-    XCTAssertFalse(name.isInvalid)
-    XCTAssertFalse(name.errors[.required])
-  }
-
-  func testUpdateValidity() throws {
-    let name = FormControl(
-      "",
-      validators: [.required],
-      strategy: .never
-    )
-
-    XCTAssertFalse(name.isValid)
-    XCTAssertFalse(name.isInvalid)
-    XCTAssertFalse(name.errors[.required])
-
-    name.updateValidity()
+  func testInitAndUpdatePendingValue() throws {
+    let name = FormControl("", validators: [.required])
 
     XCTAssertFalse(name.isValid)
     XCTAssertTrue(name.isInvalid)
     XCTAssertTrue(name.errors[.required])
+
+    name.pendingValue = "Mario"
+
+    XCTAssertEqual(name.value, "")
+    XCTAssertFalse(name.isValid)
+    XCTAssertTrue(name.isInvalid)
+    XCTAssertTrue(name.errors[.required])
+  }
+
+  func testUpdateValidity() throws {
+    let name = FormControl("", validators: [.required])
+
+    XCTAssertFalse(name.isValid)
+    XCTAssertTrue(name.isInvalid)
+    XCTAssertTrue(name.errors[.required])
+
+    name.pendingValue = "Mario"
+    name.updateValueAndValidity()
+
+    XCTAssertTrue(name.isValid)
+    XCTAssertFalse(name.isInvalid)
+    XCTAssertFalse(name.errors[.required])
+  }
+
+  func testValidationErrors() throws {
+    let name = FormControl("", validators: [.required])
+
+    XCTAssertTrue(name.errors[.required])
+    // For unrelated error
+    XCTAssertFalse(name.errors[.email])
   }
 }

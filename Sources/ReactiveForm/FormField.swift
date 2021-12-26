@@ -1,5 +1,5 @@
 @propertyWrapper
-public struct FormField<Value> {
+public struct FormField<Value: Equatable> {
   private var value: Value
 
   public private(set) var projectedValue: FormControl<Value>
@@ -16,14 +16,12 @@ public struct FormField<Value> {
 
   public init(
     wrappedValue value: Value,
-    validators: [Validator<Value>] = [],
-    strategy: UpdateStrategy = .default
+    validators: [Validator<Value>] = []
   ) {
     self.value = value
     self.projectedValue = .init(
       value,
-      validators: validators,
-      strategy: strategy
+      validators: validators
     )
   }
 }

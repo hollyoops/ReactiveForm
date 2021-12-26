@@ -1,38 +1,74 @@
 import Combine
 
-open class ObservableForm: ObservableObject {
-  fileprivate var cancellables: Set<AnyCancellable> = []
+/// A form with a publisher that emits before the form has changed.
+///
+///     class ProfileForm: ObservableForm {
+///       var name = FormControl("", validators: [.required])
+///       var email = FormControl("", validators: [.email])
+///     }
+open class ObservableForm: AbstractForm {
+  /// Stores subscribers of `objectWillChange` from controls.
+  private var cancellables: Set<AnyCancellable> = []
+  private var controls: [ValidatableControl] = []
+
+  @Published public private(set) var isValid: Bool = false
+  @Published public private(set) var isInvalid: Bool = false
 
   public init() {
-    forwardObjectWillChange(self)
+    collectControls(self)
+    forwardObjectWillChangeFromControls()
+    updateFormValidity()
+  }
+
+  /// Updates the validity of all controls in the form,
+  /// also updates the validity of the form.
+  public func updateValueAndValidity() {
+    updateControlsValidity()
+    updateFormValidity()
   }
 }
 
-extension ObservableForm {
-  func forwardObjectWillChange(_ object: Any) {
+private extension ObservableForm {
+  func collectControls(_ object: Any) {
     Mirror(reflecting: object)
       .children
-      .forEach(forwardObjectWillChangeIfNeeded)
+      .forEach(collectControlIfPossible)
   }
 
-  /// Subscribes to `objectWillChange` of FormControl
-  /// due to the nested `ObservableObject`
-  private func forwardObjectWillChangeIfNeeded(
-    child: Mirror.Child
-  ) {
-    guard let formControl = child.value as? ObjectChangeForwardable else {
+  func collectControlIfPossible(child: Mirror.Child) {
+    guard let control = child.value as? ValidatableControl else {
       // Properties annotated by `FormField`
-      forwardObjectWillChange(child.value)
+      collectControls(child.value)
       return
     }
 
-    forward(from: formControl)
+    controls.append(control)
   }
 
-  private func forward(from formControl: ObjectChangeForwardable) {
-    formControl
+  func forwardObjectWillChangeFromControls() {
+    controls.forEach(forward(from:))
+  }
+
+  /// Forwards `objectWillChange` of FormControl
+  /// due to the nested `ObservableObject`.
+  func forward(from control: ValidatableControl) {
+    control
       .objectWillChange
       .sink(receiveValue: objectWillChange.send)
       .store(in: &cancellables)
+  }
+
+  func updateControlsValidity() {
+    controls.forEach {
+      $0.updateValueAndValidity()
+    }
+  }
+
+  func updateFormValidity() {
+    isValid = controls.allSatisfy {
+      $0.isValid
+    }
+
+    isInvalid = !isValid
   }
 }

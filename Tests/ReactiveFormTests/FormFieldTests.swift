@@ -1,31 +1,30 @@
 import XCTest
 import ReactiveForm
 
-fileprivate class ProfileForm: ObservableForm {
-  @FormField(validators: [.required], strategy: .never)
+private class ProfileForm: ObservableForm {
+  @FormField(validators: [.required])
   var name = "Mario"
 }
 
 final class FormFieldTests: XCTestCase {
   func testWrappedValue() throws {
-    let profileForm = ProfileForm()
+    let form = ProfileForm()
 
-    XCTAssertEqual(profileForm.name, "Mario")
+    XCTAssertEqual(form.name, "Mario")
   }
 
   func testProjectedValue() throws {
-    let profileForm = ProfileForm()
+    let form = ProfileForm()
 
-    XCTAssertEqual(profileForm.$name.value, "Mario")
-    XCTAssertEqual(profileForm.$name.validators[0].id, Validator.required.id)
-    XCTAssertEqual(profileForm.$name.strategy, .never)
+    XCTAssertEqual(form.$name.value, "Mario")
+    XCTAssertEqual(form.$name.validators[0].id, Validator.required.id)
   }
 
   func testUpdatingValue() throws {
-    let profileForm = ProfileForm()
+    let form = ProfileForm()
 
-    profileForm.name = "Luigi"
+    form.name = "Luigi"
 
-    XCTAssertEqual(profileForm.$name.value, "Luigi")
+    XCTAssertEqual(form.$name.value, "Luigi")
   }
 }
