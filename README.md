@@ -2,20 +2,19 @@
 
 [![Main workflow](https://github.com/samuraime/ReactiveForm/workflows/Main/badge.svg)](https://github.com/samuraime/ReactiveForm/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/samuraime/ReactiveForm/branch/main/graph/badge.svg?token=U1RGM8F64E)](https://codecov.io/gh/samuraime/ReactiveForm)
 
-A reactive form that works with SwiftUI. Just implemented some great concepts from [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
+A reactive form that works with `SwiftUI` and takes advantage of `Combine`. Just grabbed some great ideas from [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
 
 ## Basic usage
 
-There are two ways to write your code, using `FormControl` directly or `@FormField`.
-
-### `FormControl`
+Use `ObservableForm` and `FormControl` to build a form.
 
 ```swift
+import SwiftUI
 import ReactiveForm
 
 class ProfileForm: ObservableForm {
-  var name = FormControl("", [.required])
-  var email = FormControl("", [.required, .email])
+  var name = FormControl("", validators: [.required])
+  var email = FormControl("", validators: [.required, .email])
 }
 
 struct ContentView: View {
@@ -36,9 +35,10 @@ struct ContentView: View {
 }
 ```
 
-### `@FormField`
+Additionally, there is `@FormField` for the fans of property wrapper. Its `projectedValue` is just `FormControl`. The code in View is a little bit different from the example above. Please note the position of `$`. 
 
 ```swift
+import SwiftUI
 import ReactiveForm
 
 class ProfileForm: ObservableForm {
