@@ -117,5 +117,85 @@ final class ObservableFormSpec: QuickSpec {
         }
       }
     }
+
+    describe("ObservableForm.isPristine") {
+      context("Init the form") {
+        it("should be pristine") {
+          let form = ProfileForm()
+
+          expect(form.isPristine) == true
+          expect(form.isDirty) == false
+        }
+      }
+
+      context("Updates value of a control") {
+        it("should be dirty") {
+          let form = ProfileForm()
+
+          form.name.value = "Mario"
+
+          expect(form.isPristine) == false
+          expect(form.isDirty) == true
+        }
+      }
+
+      context("Updates pendingValue of a control") {
+        it("should be pristine") {
+          let form = ProfileForm()
+
+          form.name.pendingValue = "Mario"
+
+          expect(form.isPristine) == true
+          expect(form.isDirty) == false
+        }
+      }
+
+      context("Updates pendingValue and updateValueAndValidity of a control") {
+        it("should be pristine") {
+          let form = ProfileForm()
+
+          form.name.pendingValue = "Mario"
+          form.name.updateValueAndValidity()
+
+          expect(form.isPristine) == false
+          expect(form.isDirty) == true
+        }
+      }
+    }
+
+    describe("ObservableForm.markAsPristine()") {
+      context("Marks the form as dirty") {
+        it("should be dirty") {
+          let form = ProfileForm()
+
+          form.markAsDirty()
+
+          expect(form.isPristine) == false
+          expect(form.isDirty) == true
+
+          expect(form.name.isPristine) == false
+          expect(form.name.isDirty) == true
+          expect(form.email.isPristine) == false
+          expect(form.email.isDirty) == true
+        }
+      }
+
+      context("Marks the form as pristine") {
+        it("should be pristine") {
+          let form = ProfileForm()
+          form.markAsDirty()
+
+          form.markAsPristine()
+
+          expect(form.isPristine) == true
+          expect(form.isDirty) == false
+
+          expect(form.name.isPristine) == true
+          expect(form.name.isDirty) == false
+          expect(form.email.isPristine) == true
+          expect(form.email.isDirty) == false
+        }
+      }
+    }
   }
 }

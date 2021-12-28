@@ -3,6 +3,10 @@ import Foundation
 public struct ValidationErrors<Value> {
   var errors: [UUID: Bool] = [:]
 
+  var hasError: Bool {
+    errors.contains { $0.value }
+  }
+
   mutating func update(
     for validator: Validator<Value>,
     value: Bool

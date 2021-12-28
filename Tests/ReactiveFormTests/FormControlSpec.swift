@@ -133,5 +133,75 @@ class FormControlSpec: QuickSpec {
         }
       }
     }
+
+    describe("FormControl.isPristine") {
+      context("init default value") {
+        it("should be pristine") {
+          let name = FormControl("Mario")
+
+          expect(name.isPristine) == true
+          expect(name.isDirty) == false
+        }
+      }
+
+      context("update value") {
+        it("should be dirty") {
+          let name = FormControl("Mario")
+
+          name.value = "Luigi"
+
+          expect(name.isPristine) == false
+          expect(name.isDirty) == true
+        }
+      }
+
+      context("update pendingValue") {
+        it("should be pristine") {
+          let name = FormControl("Mario")
+
+          name.pendingValue = "Luigi"
+
+          expect(name.isPristine) == true
+          expect(name.isDirty) == false
+        }
+      }
+
+      context("update pendingValue and updateValueAndValidity") {
+        it("should be dirty") {
+          let name = FormControl("Mario")
+
+          name.pendingValue = "Luigi"
+          name.updateValueAndValidity()
+
+          expect(name.isPristine) == false
+          expect(name.isDirty) == true
+        }
+      }
+    }
+
+    describe("FormControl.markAsPristine()") {
+      context("mark as dirty") {
+        it("should be dirty") {
+          let name = FormControl("Mario")
+
+          name.markAsDirty()
+
+          expect(name.isPristine) == false
+          expect(name.isDirty) == true
+        }
+      }
+
+      context("mark as pristine") {
+        it("should be pristine") {
+          let name = FormControl("Mario")
+          name.markAsDirty()
+
+          name.markAsPristine()
+
+          expect(name.isPristine) == true
+          expect(name.isDirty) == false
+        }
+      }
+    }
   }
 }

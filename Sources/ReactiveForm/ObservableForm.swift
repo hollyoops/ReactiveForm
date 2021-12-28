@@ -11,9 +11,20 @@ open class ObservableForm: AbstractForm {
   private var cancellables: Set<AnyCancellable> = []
   private var controls: [ValidatableControl] = []
 
-  @Published public private(set) var isValid: Bool = false
+  @Published public private(set) var isValid: Bool = false {
+    didSet {
+      isInvalid = !isValid
+    }
+  }
   @Published public private(set) var isInvalid: Bool = false
+  @Published public private(set) var isPristine: Bool = true {
+    didSet {
+      isDirty = !isPristine
+    }
+  }
+  @Published public private(set) var isDirty: Bool = false
 
+  /// Creates a observable form and sets to initial state.
   public init() {
     collectControls(self)
     forwardObjectWillChangeFromControls()
@@ -21,8 +32,8 @@ open class ObservableForm: AbstractForm {
     updateValidity()
   }
 
-  /// Updates the validity of all controls in the form,
-  /// also updates the validity of the form.
+  /// Updates the validity of all controls in the form
+  /// and also updates the validity of the form.
   public func updateValueAndValidity() {
     updateControlsValidity()
     updateValidity()
@@ -32,8 +43,34 @@ open class ObservableForm: AbstractForm {
     isValid = controls.allSatisfy {
       $0.isValid
     }
+  }
 
-    isInvalid = !isValid
+  /// Marks the form and its child controls as pristine.
+  public func markAsPristine() {
+    markAsPristine(isOnlySelf: false)
+  }
+
+  /// Marks the form and its child controls as dirty.
+  public func markAsDirty() {
+    markAsDirty(isOnlySelf: false)
+  }
+
+  func markAsPristine(isOnlySelf: Bool) {
+    isPristine = true
+    if !isOnlySelf {
+      controls.forEach {
+        $0.markAsPristine(isOnlySelf: true)
+      }
+    }
+  }
+
+  func markAsDirty(isOnlySelf: Bool) {
+    isPristine = false
+    if !isOnlySelf {
+      controls.forEach {
+        $0.markAsDirty(isOnlySelf: true)
+      }
+    }
   }
 }
 

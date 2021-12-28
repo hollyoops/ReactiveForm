@@ -3,9 +3,18 @@ import Combine
 protocol Validatable {
   var isValid: Bool { get }
   var isInvalid: Bool { get }
+  var isPristine: Bool { get }
+  var isDirty: Bool { get }
 
-  func updateValidity()
   func updateValueAndValidity()
+
+  func markAsPristine()
+  func markAsDirty()
+
+  // internal methods
+  func updateValidity()
+  func markAsPristine(isOnlySelf: Bool)
+  func markAsDirty(isOnlySelf: Bool)
 }
 
 typealias ValidatableObject = Validatable & AnyObject
