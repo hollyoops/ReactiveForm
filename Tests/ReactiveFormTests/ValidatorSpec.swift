@@ -25,7 +25,7 @@ class ValidatorSpec: QuickSpec {
           cases: [
             ("mario", false),
             ("mario@", false),
-            ("mario@gmail.com", true),
+            ("test@gmail.com", true),
           ]
         )
       }
