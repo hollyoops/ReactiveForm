@@ -1,5 +1,4 @@
-import Quick
-import Nimble
+import XCTest
 import ReactiveForm
 
 private class ProfileForm: ObservableForm {
@@ -12,190 +11,154 @@ private class PrefilledProfileForm: ObservableForm {
   var email = FormControl("test@gmail.com", validators: [.required, .email])
 }
 
-final class ObservableFormSpec: QuickSpec {
-  override func spec() {
-    describe("ObservableForm.init()") {
-      context("init with invalid values") {
-        it("should be invalid") {
-          let form = ProfileForm()
+final class ObservableFormTests: XCTestCase {
+  func testInitWithInvalidValues() throws {
+    let form = ProfileForm()
 
-          expect(form.isValid) == false
-          expect(form.isInvalid) == true
+    XCTAssertFalse(form.isValid)
+    XCTAssertTrue(form.isInvalid)
 
-          expect(form.name.isValid) == false
-          expect(form.name.isInvalid) == true
+    XCTAssertFalse(form.name.isValid)
+    XCTAssertTrue(form.name.isInvalid)
 
-          expect(form.email.isValid) == false
-          expect(form.email.isInvalid) == true
-        }
-      }
+    XCTAssertFalse(form.email.isValid)
+    XCTAssertTrue(form.email.isInvalid)
+  }
 
-      context("init with valid values") {
-        it("should be valid") {
-          let form = PrefilledProfileForm()
+  func testInitWithValidValues() throws {
+    let form = PrefilledProfileForm()
 
-          expect(form.isValid) == true
-          expect(form.isInvalid) == false
+    XCTAssertTrue(form.isValid)
+    XCTAssertFalse(form.isInvalid)
 
-          expect(form.name.isValid) == true
-          expect(form.name.isInvalid) == false
+    XCTAssertTrue(form.name.isValid)
+    XCTAssertFalse(form.name.isInvalid)
 
-          expect(form.email.isValid) == true
-          expect(form.email.isInvalid) == false
-        }
-      }
-    }
+    XCTAssertTrue(form.email.isValid)
+    XCTAssertFalse(form.email.isInvalid)
+  }
 
-    describe("Update form control's value") {
-      context("updated control is invalid") {
-        it("should be invalid") {
-          let form = PrefilledProfileForm()
+  func testUpdateWithinvalidValues() throws {
+    let form = PrefilledProfileForm()
 
-          form.name.value = ""
+    form.name.value = ""
 
-          expect(form.isValid) == false
-          expect(form.isInvalid) == true
-        }
-      }
+    XCTAssertFalse(form.isValid)
+    XCTAssertTrue(form.isInvalid)
+  }
 
-      context("updated control is valid") {
-        it("should be valid") {
-          let form = ProfileForm()
+  func testUpdateWithValidValues() throws {
+    let form = ProfileForm()
 
-          form.name.value = "Mario"
+    form.name.value = "Mario"
 
-          expect(form.isValid) == false
-          expect(form.isInvalid) == true
-          expect(form.name.isValid) == true
-          expect(form.name.isInvalid) == false
-          expect(form.email.isValid) == false
-          expect(form.email.isInvalid) == true
+    XCTAssertFalse(form.isValid)
+    XCTAssertTrue(form.isInvalid)
+    XCTAssertTrue(form.name.isValid)
+    XCTAssertFalse(form.name.isInvalid)
+    XCTAssertFalse(form.email.isValid)
+    XCTAssertTrue(form.email.isInvalid)
 
-          form.email.value = "test@gmail.com"
+    form.email.value = "test@gmail.com"
 
-          expect(form.isValid) == true
-          expect(form.isInvalid) == false
-          expect(form.name.isValid) == true
-          expect(form.name.isInvalid) == false
-          expect(form.email.isValid) == true
-          expect(form.email.isInvalid) == false
-        }
-      }
-    }
+    XCTAssertTrue(form.isValid)
+    XCTAssertFalse(form.isInvalid)
+    XCTAssertTrue(form.name.isValid)
+    XCTAssertFalse(form.name.isInvalid)
+    XCTAssertTrue(form.email.isValid)
+    XCTAssertFalse(form.email.isInvalid)
+  }
 
-    describe("ObservableForm.updateValueAndValidity()") {
-      context("some of fields are invalid") {
-        it("should be invalid") {
-          let form = ProfileForm()
-          form.name.pendingValue = "Mario"
+  func testUpdateValueAndValidityWithInvalidPendingValues() throws {
+    let form = ProfileForm()
+    form.name.pendingValue = "Mario"
 
-          form.updateValueAndValidity()
+    form.updateValueAndValidity()
 
-          expect(form.isValid) == false
-          expect(form.isInvalid) == true
-          expect(form.name.isValid) == true
-          expect(form.name.isInvalid) == false
-          expect(form.email.isValid) == false
-          expect(form.email.isInvalid) == true
-        }
-      }
+    XCTAssertFalse(form.isValid)
+    XCTAssertTrue(form.isInvalid)
+    XCTAssertTrue(form.name.isValid)
+    XCTAssertFalse(form.name.isInvalid)
+    XCTAssertFalse(form.email.isValid)
+    XCTAssertTrue(form.email.isInvalid)
+  }
 
-      context("all fields are valid") {
-        it("should be valid") {
-          let form = ProfileForm()
-          form.name.pendingValue = "Mario"
-          form.email.pendingValue = "test@gmail.com"
+  func testUpdateValueAndValidityWithValidPendingValues() throws {
+    let form = ProfileForm()
+    form.name.pendingValue = "Mario"
+    form.email.pendingValue = "test@gmail.com"
 
-          form.updateValueAndValidity()
+    form.updateValueAndValidity()
 
-          expect(form.isValid) == true
-          expect(form.isInvalid) == false
-          expect(form.name.isValid) == true
-          expect(form.name.isInvalid) == false
-          expect(form.email.isValid) == true
-          expect(form.email.isInvalid) == false
-        }
-      }
-    }
+    XCTAssertTrue(form.isValid)
+    XCTAssertFalse(form.isInvalid)
+    XCTAssertTrue(form.name.isValid)
+    XCTAssertFalse(form.name.isInvalid)
+    XCTAssertTrue(form.email.isValid)
+    XCTAssertFalse(form.email.isInvalid)
+  }
 
-    describe("ObservableForm.isPristine") {
-      context("Init the form") {
-        it("should be pristine") {
-          let form = ProfileForm()
+  func testPristineStateWithDefaultValue() throws {
+    let form = ProfileForm()
 
-          expect(form.isPristine) == true
-          expect(form.isDirty) == false
-        }
-      }
+    XCTAssertTrue(form.isPristine)
+    XCTAssertFalse(form.isDirty)
+  }
 
-      context("Updates value of a control") {
-        it("should be dirty") {
-          let form = ProfileForm()
+  func testPristineStateWithChangedValue() throws {
+    let form = ProfileForm()
 
-          form.name.value = "Mario"
+    form.name.value = "Mario"
 
-          expect(form.isPristine) == false
-          expect(form.isDirty) == true
-        }
-      }
+    XCTAssertFalse(form.isPristine)
+    XCTAssertTrue(form.isDirty)
+  }
 
-      context("Updates pendingValue of a control") {
-        it("should be pristine") {
-          let form = ProfileForm()
+  func testPristineStateWithChangedPendingValue() throws {
+    let form = ProfileForm()
 
-          form.name.pendingValue = "Mario"
+    form.name.pendingValue = "Mario"
 
-          expect(form.isPristine) == true
-          expect(form.isDirty) == false
-        }
-      }
+    XCTAssertTrue(form.isPristine)
+    XCTAssertFalse(form.isDirty)
+  }
 
-      context("Updates pendingValue and updateValueAndValidity of a control") {
-        it("should be pristine") {
-          let form = ProfileForm()
+  func testPristineStateWithAppliedValue() throws {
+    let form = ProfileForm()
 
-          form.name.pendingValue = "Mario"
-          form.name.updateValueAndValidity()
+    form.name.pendingValue = "Mario"
+    form.name.updateValueAndValidity()
 
-          expect(form.isPristine) == false
-          expect(form.isDirty) == true
-        }
-      }
-    }
+    XCTAssertFalse(form.isPristine)
+    XCTAssertTrue(form.isDirty)
+  }
 
-    describe("ObservableForm.markAsPristine()") {
-      context("Marks the form as dirty") {
-        it("should be dirty") {
-          let form = ProfileForm()
+  func testMarkAsDirty() throws {
+    let form = ProfileForm()
 
-          form.markAsDirty()
+    form.markAsDirty()
 
-          expect(form.isPristine) == false
-          expect(form.isDirty) == true
+    XCTAssertFalse(form.isPristine)
+    XCTAssertTrue(form.isDirty)
 
-          expect(form.name.isPristine) == false
-          expect(form.name.isDirty) == true
-          expect(form.email.isPristine) == false
-          expect(form.email.isDirty) == true
-        }
-      }
+    XCTAssertFalse(form.name.isPristine)
+    XCTAssertTrue(form.name.isDirty)
+    XCTAssertFalse(form.email.isPristine)
+    XCTAssertTrue(form.email.isDirty)
+  }
 
-      context("Marks the form as pristine") {
-        it("should be pristine") {
-          let form = ProfileForm()
-          form.markAsDirty()
+  func testMarkAsPristine() throws {
+    let form = ProfileForm()
+    form.markAsDirty()
 
-          form.markAsPristine()
+    form.markAsPristine()
 
-          expect(form.isPristine) == true
-          expect(form.isDirty) == false
+    XCTAssertTrue(form.isPristine)
+    XCTAssertFalse(form.isDirty)
 
-          expect(form.name.isPristine) == true
-          expect(form.name.isDirty) == false
-          expect(form.email.isPristine) == true
-          expect(form.email.isDirty) == false
-        }
-      }
-    }
+    XCTAssertTrue(form.name.isPristine)
+    XCTAssertFalse(form.name.isDirty)
+    XCTAssertTrue(form.email.isPristine)
+    XCTAssertFalse(form.email.isDirty)
   }
 }
