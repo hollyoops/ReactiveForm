@@ -5,3 +5,10 @@
 xcuserdata/
 DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+
+/*.doccarchive
+
+# Local Netlify folder
+.netlify
+
+node_modules/
