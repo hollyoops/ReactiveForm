@@ -2,6 +2,9 @@ import Combine
 
 /// A form with a publisher that emits before the form has changed.
 ///
+/// The form collects all controls from its properties
+/// that are marked as ``FormControl``.
+///
 ///     class ProfileForm: ObservableForm {
 ///       var name = FormControl("", validators: [.required])
 ///       var email = FormControl("", validators: [.email])
@@ -11,17 +14,28 @@ open class ObservableForm: AbstractForm {
   private var cancellables: Set<AnyCancellable> = []
   private var controls: [ValidatableControl] = []
 
+  /// A Boolean value indicating whether the form is valid.
   @Published public private(set) var isValid: Bool = false {
     didSet {
       isInvalid = !isValid
     }
   }
+
+  /// A Boolean value indicating whether the form is invalid.
   @Published public private(set) var isInvalid: Bool = false
+
+  /// A Boolean value indicating whether the form has not been changed yet.
+  /// All of its controls are ``FormControl/isPristine``
+  /// when the value is true.
   @Published public private(set) var isPristine: Bool = true {
     didSet {
       isDirty = !isPristine
     }
   }
+
+  /// A Boolean value indicating whether the form has been changed.
+  /// Some of its controls are ``FormControl/isDirty``
+  /// when the value is true.
   @Published public private(set) var isDirty: Bool = false
 
   /// Creates a observable form and sets to initial state.

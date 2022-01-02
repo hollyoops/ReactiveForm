@@ -1,18 +1,22 @@
 import Foundation
 
+/// A validator that performs synchronous validation.
 public struct Validator<Value>: Identifiable {
   public typealias ValidatorFn = (Value) -> Bool
 
-  /// Identifier of a validator of the same type
+  /// Identifier of a validator of the same type.
   public private(set) var id: UUID
+  /// Validator function.
   public private(set) var fn: ValidatorFn
 
   // TODO: check duplicated id
+  /// Creates a validator with the provided identifier.
   public init(id: UUID, fn: @escaping ValidatorFn) {
     self.id = id
     self.fn = fn
   }
 
+  /// Creates a validator with a unique identifier.
   public init(_ fn: @escaping ValidatorFn) {
     self.id = UUID()
     self.fn = fn
@@ -28,8 +32,11 @@ private enum Identifier {
 }
 
 extension Validator where Value == String {
+  /// Validator that requires the control have a non-empty value.
   public static let required = Validator(Rule.required)
 
+  /// Validator that requires the control's value pass an email validation test.
+  ///
   /// Tests the value using a [regular
   /// expression](https://developer.apple.com/documentation/foundation/nsregularexpression)
   /// pattern suitable for common usecases. The pattern is based on the definition of a valid email
@@ -47,12 +54,16 @@ extension Validator where Value == String {
   /// validate the value against a different pattern.
   public static let email = Validator(Rule.email)
 
+  /// Validator that requires the length of the control's value to be greater than
+  /// or equal to the provided minimum length.
   public static func minLength(_ minimum: Int) -> Validator {
     Validator(id: Identifier.minLength) { value in
       Rule.minLength(value, minimumLength: minimum)
     }
   }
 
+  /// Validator that requires the length of the control's value to be less than
+  /// or equal to the provided maximum length.
   public static func maxLength(_ maximum: Int) -> Validator {
     Validator(id: Identifier.maxLength) { value in
       Rule.maxLength(value, maximumLength: maximum)
@@ -61,12 +72,16 @@ extension Validator where Value == String {
 }
 
 extension Validator where Value == Int {
+  /// Validator that requires the control's value to be greater than
+  /// or equal to the provided number.
   public static func min(_ minimum: Int) -> Validator {
     Validator(id: Identifier.min) { value in
       Rule.min(value, minimumValue: minimum)
     }
   }
 
+  /// Validator that requires the control's value to be less than
+  /// or equal to the provided number.
   public static func max(_ maximum: Int) -> Validator {
     Validator(id: Identifier.max) { value in
       Rule.max(value, maximumValue: maximum)
@@ -75,6 +90,7 @@ extension Validator where Value == Int {
 }
 
 extension Validator where Value == Bool? {
+  /// Validator that requires the control's value be true.
   public static let requiredTrue = Validator(Rule.requiredTrue)
 }
 

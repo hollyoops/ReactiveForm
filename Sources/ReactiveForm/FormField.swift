@@ -1,3 +1,4 @@
+/// A property wrapper type that creates a ``FormControl``.
 @propertyWrapper
 public struct FormField<Value: Equatable> {
   private var value: Value

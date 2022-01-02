@@ -1,14 +1,19 @@
-# ReactiveForm
+# ``ReactiveForm``
 
-[![Main workflow](https://github.com/samuraime/ReactiveForm/workflows/Main/badge.svg)](https://github.com/samuraime/ReactiveForm/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/samuraime/ReactiveForm/branch/main/graph/badge.svg?token=0X34NQ63HK)](https://codecov.io/gh/samuraime/ReactiveForm)
+A reactive form that works with `SwiftUI` and takes advantage of `Combine`.
 
-A reactive form that works with `SwiftUI` and takes advantage of `Combine`. Just grabbed some great ideas from [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
+## Overview
 
-## How to use
+The ReactiveForm grabbed some great ideas from [Reactive forms of Angular](https://angular.io/guide/reactive-forms). It also allows you to:
 
-### Creating a form model
+- Capture the current value and validation status of a form.
+- Track and listen for changes to the form's data model.
+- Validate the correctness.
+- Create custom validators.
 
-You can build a form using ``ObservableForm`` and ``FormControl``.
+### Basic usage
+
+You can build a form model using ``ObservableForm`` and ``FormControl``.
 
 ```swift
 import ReactiveForm
@@ -93,42 +98,15 @@ struct ContentView: View {
 }
 ```
 
-### `@FormField`
+## Topics
 
-Additionally, there is `@FormField` for the fans of property wrapper. Its `projectedValue` is just `FormControl`. The code in View is a little bit different from the example above. Please note the position of `$`. 
+### Form
 
-```swift
-import SwiftUI
-import ReactiveForm
+- ``ObservableForm``
+- ``FormControl``
+- ``FormField``
 
-class ProfileForm: ObservableForm {
-  @FormField(validators: [.required])
-  var name = ""
-  
-  @FormField(validators: [.required, .email])
-  var email = ""
-}
+### Validation
 
-struct ContentView: View {
-  @StateObject var form = ProfileForm()
-
-  var body: some View {
-    Form {
-      TextField("Name", text: $form.firstName)
-      if form.$name.errors[.required] {
-        Text("Please fill a name.")
-          .foregroundColor(.red)
-      }
-      TextField("Email", text: $form.email)
-      if form.$email.errors[.email] {
-        Text("Please fill a valid email")
-          .foregroundColor(.red)
-      }
-    }
-  }
-}
-```
-
-## License
-
-[MIT](LICENSE)
+- ``Validator``
+- ``ValidationErrors``
