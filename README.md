@@ -2,9 +2,19 @@
 
 [![Main workflow](https://github.com/samuraime/ReactiveForm/workflows/Main/badge.svg)](https://github.com/samuraime/ReactiveForm/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/samuraime/ReactiveForm/branch/main/graph/badge.svg?token=0X34NQ63HK)](https://codecov.io/gh/samuraime/ReactiveForm)
 
-A reactive form that works with `SwiftUI` and takes advantage of `Combine`. Just grabbed some great ideas from [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
+A reactive form that works with `SwiftUI` and takes advantage of `Combine`. Just grabbed great ideas from [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
 
-## How to use
+## Install
+
+Add the following to `Package.swift`:
+
+```swift
+.package(url: "https://github.com/samuraime/ReactiveForm", from: "0.1.0")
+```
+
+[Or add the package in Xcode.](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app)
+
+## Usage
 
 ### Creating a form model
 
@@ -128,6 +138,12 @@ struct ContentView: View {
   }
 }
 ```
+
+## Documentation
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6f9d1a6b-50a6-49d6-91c9-8f842ce8e853/deploy-status)](https://app.netlify.com/sites/sad-liskov-2a1cd8/deploys)
+
+The APIs are written by [DocC](https://developer.apple.com/documentation/docc), you can build it in your Xcode or see [the online version](https://sad-liskov-2a1cd8.netlify.app/documentation/).
 
 ## License
 

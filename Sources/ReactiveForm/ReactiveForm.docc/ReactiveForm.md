@@ -4,7 +4,7 @@ A reactive form that works with `SwiftUI` and takes advantage of `Combine`.
 
 ## Overview
 
-The ReactiveForm grabbed some great ideas from [Reactive forms of Angular](https://angular.io/guide/reactive-forms). It also allows you to:
+The ReactiveForm grabbed great ideas from [Reactive forms of Angular](https://angular.io/guide/reactive-forms). It also allows you to:
 
 - Capture the current value and validation status of a form.
 - Track and listen for changes to the form's data model.
