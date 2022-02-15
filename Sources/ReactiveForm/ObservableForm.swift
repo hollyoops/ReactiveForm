@@ -50,8 +50,16 @@ open class ObservableForm: AbstractForm {
 
   /// Updates the validity of all controls in the form
   /// and also updates the validity of the form.
+  public func validate() {
+    controls.forEach {
+      $0.validate()
+    }
+  }
+  
   public func updateValueAndValidity() {
-    updateControlsValidity()
+    controls.forEach {
+      $0.updateValueAndValidity()
+    }
   }
 }
 
@@ -83,11 +91,5 @@ private extension ObservableForm {
       .objectWillChange
       .sink(receiveValue: objectWillChange.send)
       .store(in: &cancellables)
-  }
-
-  func updateControlsValidity() {
-    controls.forEach {
-      $0.updateValueAndValidity()
-    }
   }
 }

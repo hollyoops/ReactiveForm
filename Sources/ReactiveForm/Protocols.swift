@@ -6,8 +6,8 @@ protocol Validatable {
   var isPristine: Bool { get }
   var isDirty: Bool { get }
 
+  func validate()
   func updateValueAndValidity()
-//  func updateValidity()
 }
 
 protocol ValidatableControl: Validatable {

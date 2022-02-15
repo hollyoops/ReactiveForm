@@ -7,7 +7,7 @@ public class FormControl<Value: Equatable>: AbstractControl {
   @Published public var value: Value {
     didSet {
       markAsDirty()
-      updateValidity()
+      validate()
     }
   }
 
@@ -52,7 +52,7 @@ public class FormControl<Value: Equatable>: AbstractControl {
     self.pendingValue = value
     self.validators = validators
 
-    updateValidity()
+    validate()
   }
 
   /// Synchronizes `pendingValue` to `value`
@@ -64,7 +64,7 @@ public class FormControl<Value: Equatable>: AbstractControl {
   }
 
   /// Recalculates the validity of the control.
-  func updateValidity() {
+  func validate() {
     collectErrors()
     setValidityByErrors()
   }
