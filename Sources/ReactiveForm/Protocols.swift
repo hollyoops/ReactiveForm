@@ -7,27 +7,12 @@ protocol Validatable {
   var isDirty: Bool { get }
 
   func updateValueAndValidity()
-
-  func markAsPristine()
-  func markAsDirty()
-
-  // internal methods
-  func updateValidity()
-  func markAsPristine(isOnlySelf: Bool)
-  func markAsDirty(isOnlySelf: Bool)
+//  func updateValidity()
 }
 
-typealias ValidatableObject = Validatable & AnyObject
-
-protocol ObjectWillChangePublishable {
+protocol ValidatableControl: Validatable {
   var objectWillChange: ObservableObjectPublisher { get }
 }
-
-protocol Childable {
-  func setParent(_: ValidatableObject)
-}
-
-typealias ValidatableControl = Validatable & ObjectWillChangePublishable & Childable
 
 protocol AbstractControl: ValidatableControl, ObservableObject {
   associatedtype Value where Value: Equatable

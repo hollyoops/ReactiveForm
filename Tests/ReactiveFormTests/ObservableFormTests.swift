@@ -132,33 +132,4 @@ final class ObservableFormTests: XCTestCase {
     XCTAssertFalse(form.isPristine)
     XCTAssertTrue(form.isDirty)
   }
-
-  func testMarkAsDirty() throws {
-    let form = ProfileForm()
-
-    form.markAsDirty()
-
-    XCTAssertFalse(form.isPristine)
-    XCTAssertTrue(form.isDirty)
-
-    XCTAssertFalse(form.name.isPristine)
-    XCTAssertTrue(form.name.isDirty)
-    XCTAssertFalse(form.email.isPristine)
-    XCTAssertTrue(form.email.isDirty)
-  }
-
-  func testMarkAsPristine() throws {
-    let form = ProfileForm()
-    form.markAsDirty()
-
-    form.markAsPristine()
-
-    XCTAssertTrue(form.isPristine)
-    XCTAssertFalse(form.isDirty)
-
-    XCTAssertTrue(form.name.isPristine)
-    XCTAssertFalse(form.name.isDirty)
-    XCTAssertTrue(form.email.isPristine)
-    XCTAssertFalse(form.email.isDirty)
-  }
 }

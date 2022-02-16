@@ -15,76 +15,43 @@ open class ObservableForm: AbstractForm {
   private var controls: [ValidatableControl] = []
 
   /// A Boolean value indicating whether the form is valid.
-  @Published public private(set) var isValid: Bool = false {
-    didSet {
-      isInvalid = !isValid
+  public var isValid: Bool {
+    controls.allSatisfy {
+      $0.isValid
     }
   }
 
   /// A Boolean value indicating whether the form is invalid.
-  @Published public private(set) var isInvalid: Bool = false
+  public var isInvalid: Bool {
+    !isValid
+  }
 
   /// A Boolean value indicating whether the form has not been changed yet.
   /// All of its controls are ``FormControl/isPristine``
   /// when the value is true.
-  @Published public private(set) var isPristine: Bool = true {
-    didSet {
-      isDirty = !isPristine
-    }
+  public var isPristine: Bool {
+    !isDirty
   }
 
   /// A Boolean value indicating whether the form has been changed.
   /// Some of its controls are ``FormControl/isDirty``
   /// when the value is true.
-  @Published public private(set) var isDirty: Bool = false
+  public var isDirty: Bool {
+    controls.contains {
+      $0.isDirty
+    }
+  }
 
   /// Creates a observable form and sets to initial state.
   public init() {
     collectControls(self)
     forwardObjectWillChangeFromControls()
-    setFormAsParentOfControls()
-    updateValidity()
   }
 
   /// Updates the validity of all controls in the form
   /// and also updates the validity of the form.
   public func updateValueAndValidity() {
     updateControlsValidity()
-    updateValidity()
-  }
-
-  func updateValidity() {
-    isValid = controls.allSatisfy {
-      $0.isValid
-    }
-  }
-
-  /// Marks the form and its child controls as pristine.
-  public func markAsPristine() {
-    markAsPristine(isOnlySelf: false)
-  }
-
-  /// Marks the form and its child controls as dirty.
-  public func markAsDirty() {
-    markAsDirty(isOnlySelf: false)
-  }
-
-  func markAsPristine(isOnlySelf: Bool) {
-    isPristine = true
-    if !isOnlySelf {
-      controls.forEach {
-        $0.markAsPristine(isOnlySelf: true)
-      }
-    }
-  }
-
-  func markAsDirty(isOnlySelf: Bool) {
-    isPristine = false
-    if !isOnlySelf {
-      controls.forEach {
-        $0.markAsDirty(isOnlySelf: true)
-      }
-    }
   }
 }
 
@@ -121,12 +88,6 @@ private extension ObservableForm {
   func updateControlsValidity() {
     controls.forEach {
       $0.updateValueAndValidity()
-    }
-  }
-
-  func setFormAsParentOfControls() {
-    controls.forEach {
-      $0.setParent(self)
     }
   }
 }

@@ -6,8 +6,8 @@ public class FormControl<Value: Equatable>: AbstractControl {
   /// Assigning to the value triggers validation and pristine check.
   @Published public var value: Value {
     didSet {
-      updateValidity()
       markAsDirty()
+      updateValidity()
     }
   }
 
@@ -43,8 +43,6 @@ public class FormControl<Value: Equatable>: AbstractControl {
   /// whether the ``value`` of the control has been changed.
   @Published public private(set) var isDirty: Bool = false
 
-  private weak var parent: ValidatableObject?
-
   /// Creates a form control with the provided value and its validators.
   public init(
     _ value: Value,
@@ -69,7 +67,6 @@ public class FormControl<Value: Equatable>: AbstractControl {
   func updateValidity() {
     collectErrors()
     setValidityByErrors()
-    parent?.updateValidity()
   }
 
   private func setValidityByErrors() {
@@ -85,30 +82,12 @@ public class FormControl<Value: Equatable>: AbstractControl {
   /// Marks the control as pristine
   /// and also recalculates pristine state of its parent.
   public func markAsPristine() {
-    markAsPristine(isOnlySelf: false)
+    isPristine = true
   }
 
   /// Marks the control as dirty
   /// and also recalculates pristine state of its parent.
   public func markAsDirty() {
-    markAsDirty(isOnlySelf: false)
-  }
-
-  func markAsPristine(isOnlySelf: Bool) {
-    isPristine = true
-    if !isOnlySelf {
-      parent?.markAsPristine(isOnlySelf: true)
-    }
-  }
-
-  func markAsDirty(isOnlySelf: Bool) {
     isPristine = false
-    if !isOnlySelf {
-      parent?.markAsDirty(isOnlySelf: true)
-    }
-  }
-
-  func setParent(_ parent: ValidatableObject) {
-    self.parent = parent
   }
 }
