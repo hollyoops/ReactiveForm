@@ -2,23 +2,64 @@
 
 [![Main workflow](https://github.com/samuraime/ReactiveForm/workflows/Main/badge.svg)](https://github.com/samuraime/ReactiveForm/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/samuraime/ReactiveForm/branch/main/graph/badge.svg?token=0X34NQ63HK)](https://codecov.io/gh/samuraime/ReactiveForm)
 
-A reactive form that works with `SwiftUI` and takes advantage of `Combine`. Just grabbed great ideas from [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
+A reactive form that build for `SwiftUI`. This library inspired by [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
 
-## Install
+## Installation
 
-Add the following to `Package.swift`:
+- [**Swift Package Manager**](https://swift.org/package-manager/)
 
-```swift
-.package(url: "https://github.com/samuraime/ReactiveForm", from: "0.1.0")
+1. In Xcode, open your project and navigate to **File** → **Swift Packages** → **Add Package Dependency...**
+2. Paste the repository URL (`https://github.com/hollyoops/ReactiveForm.git`) and click **Next**.
+3. For **Rules**, select **Branch** (with branch set to `master`).
+4. Click **Finish**.
+
+- [**CocoaPods**](https://cocoapods.org) 
+
+RecoilSwift is available through CocoaPods. To install it, simply add the following line to your Podfile:
+
+```ruby
+pod 'ReactiveForm'
 ```
 
-[Or add the package in Xcode.](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app)
+## Basic Usage
 
-## Usage
+### Define fields with property wrapper
+
+```swift
+import SwiftUI
+import ReactiveForm
+
+class ProfileForm: ObservableForm {
+  @FormField(validators: [.required])
+  var name = ""
+  
+  @FormField(validators: [.required, .email])
+  var email = ""
+}
+
+struct ContentView: View {
+  @StateObject var form = ProfileForm()
+
+  var body: some View {
+    Form {
+      TextField("Name", text: $form.firstName)
+      if form.$name.errors[.required] {
+        Text("Please fill a name.")
+          .foregroundColor(.red)
+      }
+      TextField("Email", text: $form.email)
+      if form.$email.errors[.email] {
+        Text("Please fill a valid email")
+          .foregroundColor(.red)
+      }
+    }
+  }
+}
+```
 
 ### Creating a form model
 
-You can build a form using ``ObservableForm`` and ``FormControl``.
+You are are not a big fan of property wrapper, you can build a form using ``ObservableForm`` and ``FormControl``.
 
 ```swift
 import ReactiveForm
@@ -103,41 +144,6 @@ struct ContentView: View {
 }
 ```
 
-### `@FormField`
-
-Additionally, there is `@FormField` for the fans of property wrapper. Its `projectedValue` is just `FormControl`. The code in View is a little bit different from the example above. Please note the position of `$`. 
-
-```swift
-import SwiftUI
-import ReactiveForm
-
-class ProfileForm: ObservableForm {
-  @FormField(validators: [.required])
-  var name = ""
-  
-  @FormField(validators: [.required, .email])
-  var email = ""
-}
-
-struct ContentView: View {
-  @StateObject var form = ProfileForm()
-
-  var body: some View {
-    Form {
-      TextField("Name", text: $form.firstName)
-      if form.$name.errors[.required] {
-        Text("Please fill a name.")
-          .foregroundColor(.red)
-      }
-      TextField("Email", text: $form.email)
-      if form.$email.errors[.email] {
-        Text("Please fill a valid email")
-          .foregroundColor(.red)
-      }
-    }
-  }
-}
-```
 
 ## Documentation
 
