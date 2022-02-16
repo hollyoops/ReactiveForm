@@ -38,48 +38,6 @@ final class FormControlTests: XCTestCase {
     XCTAssertFalse(name.errors[.required])
   }
 
-  func testUpdateWithInvalidPendingValue() throws {
-    let name = FormControl("Mario", validators: [.required])
-
-    name.pendingValue = ""
-
-    XCTAssertTrue(name.isValid)
-    XCTAssertFalse(name.isInvalid)
-    XCTAssertFalse(name.errors[.required])
-  }
-
-  func testUpdateWithValidPendingValue() throws {
-    let name = FormControl("", validators: [.required])
-
-    name.pendingValue = "Mario"
-
-    XCTAssertFalse(name.isValid)
-    XCTAssertTrue(name.isInvalid)
-    XCTAssertTrue(name.errors[.required])
-  }
-
-  func testFlushPendingValueWithInvalidPendingValue() throws {
-    let name = FormControl("Mario", validators: [.required])
-
-    name.pendingValue = ""
-    name.flushPendingValue()
-
-    XCTAssertFalse(name.isValid)
-    XCTAssertTrue(name.isInvalid)
-    XCTAssertTrue(name.errors[.required])
-  }
-
-  func testFlushPendingValueWithValidPendingValue() throws {
-    let name = FormControl("", validators: [.required])
-
-    name.pendingValue = "Mario"
-    name.flushPendingValue()
-
-    XCTAssertTrue(name.isValid)
-    XCTAssertFalse(name.isInvalid)
-    XCTAssertFalse(name.errors[.required])
-  }
-
   func testValidationErrorWithUnrelatedValidator() throws {
     let name = FormControl("", validators: [.required])
 
@@ -114,25 +72,6 @@ final class FormControlTests: XCTestCase {
     XCTAssertTrue(name.isDirty)
   }
 
-  func testPristineStateWithChangedPendingValue() throws {
-    let name = FormControl("Mario")
-
-    name.pendingValue = "Luigi"
-
-    XCTAssertTrue(name.isPristine)
-    XCTAssertFalse(name.isDirty)
-  }
-
-  func testPristineStateWithAppliedValue() throws {
-    let name = FormControl("Mario")
-
-    name.pendingValue = "Luigi"
-    name.flushPendingValue()
-
-    XCTAssertFalse(name.isPristine)
-    XCTAssertTrue(name.isDirty)
-  }
-
   func testMarkAsDirty() throws {
     let name = FormControl("Mario")
 
@@ -150,5 +89,15 @@ final class FormControlTests: XCTestCase {
 
     XCTAssertTrue(name.isPristine)
     XCTAssertFalse(name.isDirty)
+  }
+  
+  func testManuallyMode() throws {
+    let name = FormControl("", validators: [.required], type: .manually)
+    
+    XCTAssertTrue(name.isValid)
+    
+    name.validate()
+    
+    XCTAssertFalse(name.isValid)
   }
 }

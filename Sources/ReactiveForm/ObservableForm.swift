@@ -55,12 +55,6 @@ open class ObservableForm: AbstractForm {
       $0.validate()
     }
   }
-  
-  public func flushPendingValue() {
-    controls.forEach {
-      $0.flushPendingValue()
-    }
-  }
 }
 
 private extension ObservableForm {

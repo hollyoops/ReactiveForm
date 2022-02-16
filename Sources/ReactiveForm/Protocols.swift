@@ -7,7 +7,6 @@ protocol Validatable {
   var isDirty: Bool { get }
 
   func validate()
-  func flushPendingValue()
 }
 
 protocol ValidatableControl: Validatable {
@@ -18,7 +17,6 @@ protocol AbstractControl: ValidatableControl, ObservableObject {
   associatedtype Value where Value: Equatable
 
   var value: Value { get set }
-  var pendingValue: Value { get set }
   var validators: [Validator<Value>] { get }
   var errors: ValidationErrors<Value> { get }
 }

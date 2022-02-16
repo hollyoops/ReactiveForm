@@ -2,8 +2,8 @@ import SwiftUI
 import ReactiveForm
 
 class ProfileFormOnSubmit: ObservableForm {
-  var name = FormControl("", validators: [.required])
-  var email = FormControl("", validators: [.email])
+  var name = FormControl("", validators: [.required], type: .manually)
+  var email = FormControl("", validators: [.email], type: .manually)
 }
 
 struct ValidateOnSubmitView: View {
@@ -11,11 +11,11 @@ struct ValidateOnSubmitView: View {
 
   var body: some View {
     Form {
-      TextField("Name", text: $form.name.pendingValue)
+      TextField("Name", text: $form.name.value)
       if form.name.errors[.required] {
         Text("Please fill a name.").foregroundColor(.red)
       }
-      TextField("Email", text: $form.email.pendingValue)
+      TextField("Email", text: $form.email.value)
       if form.email.errors[.email] {
         Text("Please fill a valid email.").foregroundColor(.red)
       }
@@ -27,7 +27,7 @@ struct ValidateOnSubmitView: View {
   }
 
   func submit() {
-    form.flushPendingValue()
+    form.validate()
     if form.isValid {
       print(form)
     }

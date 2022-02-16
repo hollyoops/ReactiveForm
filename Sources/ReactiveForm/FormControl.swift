@@ -7,14 +7,23 @@ public class FormControl<Value: Equatable>: AbstractControl {
   @Published public var value: Value {
     didSet {
       markAsDirty()
-      validate()
+      if validateType == .automatic {
+        validate()
+      }
     }
   }
+  
+  /// Validation type to the control.
+  /// When value is `manually` you have to call `validate` manually
+  public enum ValidateType  {
+    /// When value  is changed it will automatic call the `validate()`
+    case automatic
+    /// You have to manually to call `validate()` otherwise isValid always be `true`
+    case manually
+  }
 
-  /// A value that stores a pending change of the control.
-  /// Assigning to the pendingValue does not trigger validation and pristine check.
-  @Published public var pendingValue: Value
-
+  private var validateType = ValidateType.automatic
+  
   /// Validations applied to the control.
   public private(set) var validators: [Validator<Value>]
 
@@ -46,25 +55,20 @@ public class FormControl<Value: Equatable>: AbstractControl {
   /// Creates a form control with the provided value and its validators.
   public init(
     _ value: Value,
-    validators: [Validator<Value>] = []
+    validators: [Validator<Value>] = [],
+    type: ValidateType = .automatic
   ) {
     self.value = value
-    self.pendingValue = value
     self.validators = validators
+    self.validateType = type
 
-    validate()
-  }
-
-  /// Synchronizes `pendingValue` to `value`
-  /// and updates the validity of the control.
-  public func flushPendingValue() {
-    if pendingValue != value {
-      value = pendingValue
+    if validateType == .automatic {
+      validate()
     }
   }
 
   /// Recalculates the validity of the control.
-  func validate() {
+  public func validate() {
     collectErrors()
     setValidityByErrors()
   }

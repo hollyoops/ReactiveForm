@@ -69,35 +69,6 @@ final class ObservableFormTests: XCTestCase {
     XCTAssertFalse(form.email.isInvalid)
   }
 
-  func testFlushPendingValueWithInvalidPendingValues() throws {
-    let form = ProfileForm()
-    form.name.pendingValue = "Mario"
-
-    form.flushPendingValue()
-
-    XCTAssertFalse(form.isValid)
-    XCTAssertTrue(form.isInvalid)
-    XCTAssertTrue(form.name.isValid)
-    XCTAssertFalse(form.name.isInvalid)
-    XCTAssertFalse(form.email.isValid)
-    XCTAssertTrue(form.email.isInvalid)
-  }
-
-  func testFlushPendingValueWithValidPendingValues() throws {
-    let form = ProfileForm()
-    form.name.pendingValue = "Mario"
-    form.email.pendingValue = "test@gmail.com"
-
-    form.flushPendingValue()
-
-    XCTAssertTrue(form.isValid)
-    XCTAssertFalse(form.isInvalid)
-    XCTAssertTrue(form.name.isValid)
-    XCTAssertFalse(form.name.isInvalid)
-    XCTAssertTrue(form.email.isValid)
-    XCTAssertFalse(form.email.isInvalid)
-  }
-
   func testPristineStateWithDefaultValue() throws {
     let form = ProfileForm()
 
@@ -109,25 +80,6 @@ final class ObservableFormTests: XCTestCase {
     let form = ProfileForm()
 
     form.name.value = "Mario"
-
-    XCTAssertFalse(form.isPristine)
-    XCTAssertTrue(form.isDirty)
-  }
-
-  func testPristineStateWithChangedPendingValue() throws {
-    let form = ProfileForm()
-
-    form.name.pendingValue = "Mario"
-
-    XCTAssertTrue(form.isPristine)
-    XCTAssertFalse(form.isDirty)
-  }
-
-  func testPristineStateWithAppliedValue() throws {
-    let form = ProfileForm()
-
-    form.name.pendingValue = "Mario"
-    form.name.flushPendingValue()
 
     XCTAssertFalse(form.isPristine)
     XCTAssertTrue(form.isDirty)
