@@ -1,17 +1,15 @@
 # ReactiveForm
 
-[![Main workflow](https://github.com/samuraime/ReactiveForm/workflows/Main/badge.svg)](https://github.com/samuraime/ReactiveForm/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/samuraime/ReactiveForm/branch/main/graph/badge.svg?token=0X34NQ63HK)](https://codecov.io/gh/samuraime/ReactiveForm)
+[![Main workflow](https://github.com/hollyoops/ReactiveForm/workflows/Main/badge.svg)](https://github.com/hollyoops/ReactiveForm/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/samuraime/ReactiveForm/branch/main/graph/badge.svg?token=0X34NQ63HK)](https://codecov.io/gh/samuraime/ReactiveForm)
 
-A reactive form that build for `SwiftUI`. This library inspired by [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
+A flexible and extensible forms with easy-to-use validation. This library build for `SwiftUI` and inspired by [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
 
 ## Installation
 
 - [**Swift Package Manager**](https://swift.org/package-manager/)
 
 1. In Xcode, open your project and navigate to **File** → **Swift Packages** → **Add Package Dependency...**
-2. Paste the repository URL (`https://github.com/hollyoops/ReactiveForm.git`) and click **Next**.
-3. For **Rules**, select **Branch** (with branch set to `master`).
-4. Click **Finish**.
+2. Paste the repository URL (`https://github.com/hollyoops/ReactiveForm.git`) and finish import
 
 - [**CocoaPods**](https://cocoapods.org) 
 
@@ -43,12 +41,12 @@ struct ContentView: View {
   var body: some View {
     Form {
       TextField("Name", text: $form.firstName)
-      if form.$name.errors[.required] {
+      if form.$name.isInValid {
         Text("Please fill a name.")
           .foregroundColor(.red)
       }
       TextField("Email", text: $form.email)
-      if form.$email.errors[.email] {
+      if form.$email.isInValid {
         Text("Please fill a valid email")
           .foregroundColor(.red)
       }
@@ -70,13 +68,65 @@ class ProfileForm: ObservableForm {
 }
 ```
 
-### Working with SwiftUI
+### Validating manually
+
+For some case, you may need to manually call `validate` rather than validate on change
+
 
 ```swift
-import SwiftUI
+class ProfileForm: ObservableForm {
+  @FormField("", validators: [.required], type: .manually) 
+  var name: String
+
+  @FormField("", validators: [.email], type: .manually) 
+  var email: String
+}
 
 struct ContentView: View {
   @StateObject var form = ProfileForm()
+
+  var body: some View {
+    Form {
+      TextField("Name", text: $form.name.pendingValue)
+      if form.$name.errors[.required] {
+        Text("Please fill a name.")
+          .foregroundColor(.red)
+      }
+      TextField("Email", text: $form.email.pendingValue)
+      if form.$email.errors[.email] {
+        Text("Please fill a valid email.")
+          .foregroundColor(.red)
+      }
+      Button(action: submit) {
+        Text("Submit")
+      }
+    }
+  }
+
+  func submit() {
+    form.validate()
+    if form.isValid {
+      print(form)
+    }
+  }
+}
+```
+
+### Use Dirty check to form status
+
+You can use `isDirty` & `isPristine` to check where form is edited. 
+
+One possible scenario is when page appear you don't want to show error util form is edited.
+
+```swift
+class SettingsForm: ObservableForm {
+  var name = FormControl("", validators: [.required], type: .manually) 
+
+  var email = FormControl("", validators: [.email], type: .manually) 
+}
+
+struct ContentView: View {
+  @StateObject var form = SettingsForm()
 
   var body: some View {
     Form {
@@ -96,54 +146,8 @@ struct ContentView: View {
       .disabled(form.isInvalid)
     }
   }
-
-  func submit() {
-    print(form)
-  }
 }
 ```
-
-### Validating manually
-
-You might think that performing validation every time the value changes is a bit too frequent. You can also perform validation manually at different times, such as `blur` of a text field or `submit` of a form.
-
-Here is an example for validating on submit. 
-
-It binds `pendingValue` of a form control to `TextField` instead of `value` and performs `flushPendingValue` on submit.
-
-```swift
-import SwiftUI
-
-struct ContentView: View {
-  @StateObject var form = ProfileForm()
-
-  var body: some View {
-    Form {
-      TextField("Name", text: $form.name.pendingValue)
-      if form.name.errors[.required] {
-        Text("Please fill a name.")
-          .foregroundColor(.red)
-      }
-      TextField("Email", text: $form.email.pendingValue)
-      if form.email.errors[.email] {
-        Text("Please fill a valid email.")
-          .foregroundColor(.red)
-      }
-      Button(action: submit) {
-        Text("Submit")
-      }
-    }
-  }
-
-  func submit() {
-    form.flushPendingValue()
-    if form.isValid {
-      print(form)
-    }
-  }
-}
-```
-
 
 ## Documentation
 
