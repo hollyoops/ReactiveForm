@@ -1,6 +1,6 @@
 # ReactiveForm
 
-[![Main workflow](https://github.com/hollyoops/ReactiveForm/workflows/Main/badge.svg)](https://github.com/hollyoops/ReactiveForm/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/samuraime/ReactiveForm/branch/main/graph/badge.svg?token=0X34NQ63HK)](https://codecov.io/gh/samuraime/ReactiveForm)
+[![Main workflow](https://github.com/hollyoops/ReactiveForm/workflows/Main/badge.svg)](https://github.com/hollyoops/ReactiveForm/actions/workflows/main.yml) [![codecov](https://codecov.io/gh/hollyoops/ReactiveForm/branch/main/graph/badge.svg?token=0X34NQ63HK)](https://codecov.io/gh/hollyoops/ReactiveForm)
 
 A flexible and extensible forms with easy-to-use validation. This library build for `SwiftUI` and inspired by [Reactive forms of Angular](https://angular.io/guide/reactive-forms).
 
@@ -52,6 +52,20 @@ struct ContentView: View {
       }
     }
   }
+}
+```
+
+### Customize validator
+
+```swift
+let stringValidator = Validator { stringValue: String -> Bool
+  // some check logic
+  return true
+}
+
+class ProfileForm: ObservableForm {
+  @FormField(validators: [.required, stringValidator])
+  var name = ""
 }
 ```
 
@@ -112,7 +126,7 @@ struct ContentView: View {
 }
 ```
 
-### Use Dirty check to form status
+### Use Dirty to check form status
 
 You can use `isDirty` & `isPristine` to check where form is edited. 
 
