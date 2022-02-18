@@ -11,6 +11,11 @@ private class PrefilledProfileForm: ObservableForm {
   var email = FormControl("test@gmail.com", validators: [.required, .email])
 }
 
+private class ManuallyProfileForm: ObservableForm {
+  var name = FormControl("", validators: [.required], type: .manually)
+  var email = FormControl("", validators: [.required, .email], type: .manually)
+}
+
 final class ObservableFormTests: XCTestCase {
   func testInitWithInvalidValues() throws {
     let form = ProfileForm()
@@ -83,5 +88,19 @@ final class ObservableFormTests: XCTestCase {
 
     XCTAssertFalse(form.isPristine)
     XCTAssertTrue(form.isDirty)
+  }
+  
+  func testValidate() throws {
+    let form = ManuallyProfileForm()
+
+    XCTAssertTrue(form.isValid)
+    
+    form.name.value = "Mario"
+    
+    XCTAssertTrue(form.isValid)
+    
+    form.validate()
+    
+    XCTAssertFalse(form.isValid)
   }
 }
