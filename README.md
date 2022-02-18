@@ -19,7 +19,7 @@ RecoilSwift is available through CocoaPods. To install it, simply add the follow
 pod 'ReactiveForm'
 ```
 
-## Basic Usage
+## Usage
 
 ### Define fields with property wrapper
 
@@ -165,9 +165,9 @@ struct ContentView: View {
 
 ## Documentation
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/6f9d1a6b-50a6-49d6-91c9-8f842ce8e853/deploy-status)](https://app.netlify.com/sites/sad-liskov-2a1cd8/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7593e5fb-308e-4a64-9947-8267a9f7a556/deploy-status)](https://app.netlify.com/sites/frosty-yonath-df6e87/deploys)
 
-The APIs are written by [DocC](https://developer.apple.com/documentation/docc), you can build it in your Xcode or see [the online version](https://sad-liskov-2a1cd8.netlify.app/documentation/).
+The APIs are written by [DocC](https://developer.apple.com/documentation/docc), you can build it in your Xcode or see [the online version](https://frosty-yonath-df6e87.netlify.app/documentation/).
 
 ## License
 
