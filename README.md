@@ -13,7 +13,7 @@ A flexible and extensible forms with easy-to-use validation. This library build 
 
 - [**CocoaPods**](https://cocoapods.org) 
 
-RecoilSwift is available through CocoaPods. To install it, simply add the following line to your Podfile:
+ReactiveForm is available through CocoaPods. To install it, simply add the following code to your Podfile:
 
 ```ruby
 pod 'ReactiveForm'
@@ -71,11 +71,9 @@ class ProfileForm: ObservableForm {
 
 ### Creating a form model
 
-You are are not a big fan of property wrapper, you can build a form using ``ObservableForm`` and ``FormControl``.
+You are not a big fan of property wrapper, you can build a form using ``ObservableForm`` and ``FormControl``.
 
 ```swift
-import ReactiveForm
-
 class ProfileForm: ObservableForm {
   var name = FormControl("", validators: [.required])
   var email = FormControl("", validators: [.required, .email])
@@ -118,6 +116,7 @@ struct ContentView: View {
   }
 
   func submit() {
+    // You can call `validate` manually
     form.validate()
     if form.isValid {
       print(form)
@@ -167,7 +166,7 @@ struct ContentView: View {
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7593e5fb-308e-4a64-9947-8267a9f7a556/deploy-status)](https://app.netlify.com/sites/frosty-yonath-df6e87/deploys)
 
-The APIs are written by [DocC](https://developer.apple.com/documentation/docc), you can build it in your Xcode or see [the online version](https://frosty-yonath-df6e87.netlify.app/documentation/).
+[Docs for ReactiveForm](https://frosty-yonath-df6e87.netlify.app/documentation/).
 
 ## License
 
