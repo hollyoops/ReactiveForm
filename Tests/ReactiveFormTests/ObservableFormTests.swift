@@ -69,11 +69,11 @@ final class ObservableFormTests: XCTestCase {
     XCTAssertFalse(form.email.isInvalid)
   }
 
-  func testUpdateValueAndValidityWithInvalidPendingValues() throws {
+  func testFlushPendingValueWithInvalidPendingValues() throws {
     let form = ProfileForm()
     form.name.pendingValue = "Mario"
 
-    form.updateValueAndValidity()
+    form.flushPendingValue()
 
     XCTAssertFalse(form.isValid)
     XCTAssertTrue(form.isInvalid)
@@ -83,12 +83,12 @@ final class ObservableFormTests: XCTestCase {
     XCTAssertTrue(form.email.isInvalid)
   }
 
-  func testUpdateValueAndValidityWithValidPendingValues() throws {
+  func testFlushPendingValueWithValidPendingValues() throws {
     let form = ProfileForm()
     form.name.pendingValue = "Mario"
     form.email.pendingValue = "test@gmail.com"
 
-    form.updateValueAndValidity()
+    form.flushPendingValue()
 
     XCTAssertTrue(form.isValid)
     XCTAssertFalse(form.isInvalid)
@@ -127,7 +127,7 @@ final class ObservableFormTests: XCTestCase {
     let form = ProfileForm()
 
     form.name.pendingValue = "Mario"
-    form.name.updateValueAndValidity()
+    form.name.flushPendingValue()
 
     XCTAssertFalse(form.isPristine)
     XCTAssertTrue(form.isDirty)

@@ -27,7 +27,7 @@ struct ValidateOnSubmitView: View {
   }
 
   func submit() {
-    form.updateValueAndValidity()
+    form.flushPendingValue()
     if form.isValid {
       print(form)
     }

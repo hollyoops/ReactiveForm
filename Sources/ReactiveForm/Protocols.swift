@@ -7,7 +7,7 @@ protocol Validatable {
   var isDirty: Bool { get }
 
   func validate()
-  func updateValueAndValidity()
+  func flushPendingValue()
 }
 
 protocol ValidatableControl: Validatable {

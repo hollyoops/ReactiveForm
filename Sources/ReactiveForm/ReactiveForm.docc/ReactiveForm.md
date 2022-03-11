@@ -63,7 +63,7 @@ You might think that performing validation every time the value changes is a bit
 
 Here is an example for validating on submit. 
 
-It binds `pendingValue` of a form control to `TextField` instead of `value` and performs `updateValueAndValidity` on submit.
+It binds `pendingValue` of a form control to `TextField` instead of `value` and performs `flushPendingValue` on submit.
 
 ```swift
 import SwiftUI
@@ -90,7 +90,7 @@ struct ContentView: View {
   }
 
   func submit() {
-    form.updateValueAndValidity()
+    form.flushPendingValue()
     if form.isValid {
       print(form)
     }

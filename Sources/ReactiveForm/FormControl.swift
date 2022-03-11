@@ -57,7 +57,7 @@ public class FormControl<Value: Equatable>: AbstractControl {
 
   /// Synchronizes `pendingValue` to `value`
   /// and updates the validity of the control.
-  public func updateValueAndValidity() {
+  public func flushPendingValue() {
     if pendingValue != value {
       value = pendingValue
     }

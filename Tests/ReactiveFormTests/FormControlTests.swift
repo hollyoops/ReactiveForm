@@ -58,22 +58,22 @@ final class FormControlTests: XCTestCase {
     XCTAssertTrue(name.errors[.required])
   }
 
-  func testUpdateValueAndValidityWithInvalidPendingValue() throws {
+  func testFlushPendingValueWithInvalidPendingValue() throws {
     let name = FormControl("Mario", validators: [.required])
 
     name.pendingValue = ""
-    name.updateValueAndValidity()
+    name.flushPendingValue()
 
     XCTAssertFalse(name.isValid)
     XCTAssertTrue(name.isInvalid)
     XCTAssertTrue(name.errors[.required])
   }
 
-  func testUpdateValueAndValidityWithValidPendingValue() throws {
+  func testFlushPendingValueWithValidPendingValue() throws {
     let name = FormControl("", validators: [.required])
 
     name.pendingValue = "Mario"
-    name.updateValueAndValidity()
+    name.flushPendingValue()
 
     XCTAssertTrue(name.isValid)
     XCTAssertFalse(name.isInvalid)
@@ -127,7 +127,7 @@ final class FormControlTests: XCTestCase {
     let name = FormControl("Mario")
 
     name.pendingValue = "Luigi"
-    name.updateValueAndValidity()
+    name.flushPendingValue()
 
     XCTAssertFalse(name.isPristine)
     XCTAssertTrue(name.isDirty)
